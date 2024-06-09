@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  price-monitor:
+    build: .
+    container_name: price-monitor
+    volumes:
+      - ./app.py:/app/app.py
+      - ./templates:/app/templates
+      - ./prices.db:/app/prices.db
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - EMAIL_USER=pricemonitor.alert@gmail.com
+      - EMAIL_PASS=Ag2015++

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Monitor</title>
+</head>
+<body>
+    <h1>Price Monitor</h1>
+    <form action="/add_url" method="post">
+        <label for="url">Product URL:</label>
+        <input type="text" id="url" name="url" required><br>
+        <label for="threshold">Threshold (%):</label>
+        <input type="number" id="threshold" name="threshold" step="0.01" required><br>
+        <button type="submit">Add URL</button>
+    </form>
+</body>
+</html>
