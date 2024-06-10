@@ -1,10 +1,10 @@
 import os
 import smtplib
 from email.mime.text import MIMEText
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash # type: ignore
 import sqlite3
-import requests
-from bs4 import BeautifulSoup
+import requests # type: ignore
+from bs4 import BeautifulSoup # type: ignore
 
 # Inicializa la aplicación Flask
 app = Flask(__name__)
