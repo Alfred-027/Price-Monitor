@@ -4,9 +4,9 @@ services:
     build: '.'
     container_name: 'price-monitor'
     volumes:
-      - './Source:/app/source'
+      - './Source/pricesApp.py:/app/pricesApp.py'
       - './Templates:/app/templates'
-      - './Source/db/prices.db:/app/source/db/prices.db'
+      - './Source/prices.db:/app/prices.db'
     ports:
       - '5000:5000'
     restart: 'unless-stopped'

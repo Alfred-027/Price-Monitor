@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #333;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2, .sidebar h3 {
+    color: #fff;
+    text-align: center;
+}
+
+.sidebar a {
+    color: #ccc;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background: #575757;
+    color: #fff;
+}
+
+.sidebar ul {
+    padding-left: 20px;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.product-details {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-grid .card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.product-grid .card:hover {
+    transform: scale(1.05);
+}
+
+.product-grid .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.team-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.team-card.blue {
+    border-left: 5px solid #007bff;
+}
+
+.team-card.orange {
+    border-left: 5px solid #fd7e14;
+}
+
+.team-card.red {
+    border-left: 5px solid #dc3545;
+}
+
+.team-card h4 {
+    margin-top: 0;
+}
+
+.team-card .close {
+    float: right;
+    cursor: pointer;
+    color: #999;
+}
+
+.team-card .close:hover {
+    color: #333;
+}
+
+/* Estilos para el contenedor del gráfico */
+#priceChart {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Estilos para mensajes flash */
+.alert {
+    margin-top: 20px;
+}

@@ -4,15 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Price Monitor</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluir CSS personalizado -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <!-- Incluir Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Price Monitor</h1>
-    <form action="/add_url" method="post">
-        <label for="url">Product URL:</label>
-        <input type="text" id="url" name="url" required><br>
-        <label for="threshold">Threshold (%):</label>
-        <input type="number" id="threshold" name="threshold" step="0.01" required><br>
-        <button type="submit">Add URL</button>
-    </form>
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="/recent">Añadidos Recientemente</a>
+        <a href="#">Groups</a>
+        <a href="#">Favorites</a>
+        <a href="#">Trash</a>
+        <a href="#">Settings</a>
+        <a href="#">Log Out</a>
+        <hr>
+        <h3 class="text-center">Categorías</h3>
+        <ul class="list-unstyled">
+            {% for category in categories %}
+                <li>
+                    <a href="#" onclick="fetchSubcategories({{ category[0] }})">{{ category[1] }}</a>
+                    <ul class="list-unstyled d-none" id="subcategories-{{ category[0] }}"></ul>
+                </li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <p class="text-center">Versión: {{ version }}</p>
+    </div>
+    <div class="main-content container-fluid">
+        <h1 class="mb-4">Price Monitor</h1>
+        <form action="/add_url" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="url">URL:</label>
+                <input type="text" class="form-control" id="url" name="url" required>
+            </div>
+            <div class="form-group">
+                <label for="threshold">Threshold:</label>
+                <input type="number" class="form-control" step="0.01" id="threshold" name="threshold" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Add URL</button>
+        </form>
+
+        <!-- Sección para mostrar mensajes flash -->
+        <div class="mt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Sección para mostrar los productos -->
+        <div class="product-grid mt-4">
+            <div class="row" id="product-list"></div>
+        </div>
+
+        <!-- Sección para mostrar los detalles del producto -->
+        <div class="product-details mt-4">
+            <h2>Detalles del Producto</h2>
+            <div id="product-info" class="d-none">
+                <h3 id="product-general-category"></h3>
+                <h4 id="product-sub-category"></h4>
+                <img id="product-image" src="" alt="Product Image" class="img-fluid">
+                <p id="product-price"></p>
+            </div>
+        </div>
+
+        <canvas id="priceChart" width="400" height="200"></canvas>
+    </div>
+    <!-- Incluir jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        async function fetchSubcategories(categoryId) {
+            const response = await fetch(`/categories/${categoryId}/subcategories`);
+            const subcategories = await response.json();
+            const subcategoryList = document.getElementById(`subcategories-${categoryId}`);
+            subcategoryList.innerHTML = '';
+
+            subcategories.forEach(subcategory => {
+                const subcategoryItem = document.createElement('li');
+                const subcategoryLink = document.createElement('a');
+                subcategoryLink.href = '#';
+                subcategoryLink.textContent = subcategory[1];
+                subcategoryLink.onclick = () => fetchProducts(subcategory[0]);
+                subcategoryItem.appendChild(subcategoryLink);
+                subcategoryList.appendChild(subcategoryItem);
+            });
+
+            subcategoryList.classList.toggle('d-none');
+        }
+
+        async function fetchProducts(categoryId) {
+            const response = await fetch(`/categories/${categoryId}/products`);
+            const products = await response.json();
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'col-md-4 mb-4';
+                productCard.innerHTML = `
+                    <div class="card">
+                        <img src="${product[2]}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">$${product[1]}</h5>
+                            <a href="${product[0]}" class="btn btn-primary" target="_blank">Ver Producto</a>
+                        </div>
+                    </div>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+
+        async function fetchProductDetails(url) {
+            const response = await fetch(`/product_details?url=${encodeURIComponent(url)}`);
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+                return null;
+            }
+            return data;
+        }
+
+        async function renderProductDetails() {
+            const url = document.getElementById('url').value;
+            const productDetails = await fetchProductDetails(url);
+            if (productDetails) {
+                document.getElementById('product-general-category').innerText = productDetails.general_category;
+                document.getElementById('product-sub-category').innerText = productDetails.sub_category;
+                document.getElementById('product-image').src = productDetails.image;
+                document.getElementById('product-price').innerText = `Price: $${productDetails.price}`;
+                document.getElementById('product-info').classList.remove('d-none');
+            }
+        }
+
+        async function fetchPriceData(url) {
+            const response = await fetch(`/price_data?url=${encodeURIComponent(url)}`);
+            const data = await response.json();
+            return data.map(d => ({ x: new Date(d[1]), y: d[0] }));
+        }
+
+        async function renderChart() {
+            const url = document.getElementById('url').value;
+            const data = await fetchPriceData(url);
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Price over time',
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('url').addEventListener('change', renderProductDetails);
+        document.getElementById('url').addEventListener('change', renderChart);
+        renderChart();
+    </script>
 </body>
 </html>
