@@ -3,7 +3,7 @@ Personal Mini - Proyect to track web pages prices
 
 # Release Notes
 
-## [0.2.0 - 2024-06-12](./pricesApp v0.2.0/)
+## [0.2.0 - 2024-06-12](./pricesApp%20v0.2.0)
 #### Added
 - Botón de menú para desplegar y replegar la barra lateral.
 - Botón de cerrar (X) en el borde superior derecho del sidebar para volver a replegarlo.
@@ -12,7 +12,7 @@ Personal Mini - Proyect to track web pages prices
 ### Changed
 - Ajustes de código para mejorar el funcionamiento del sidebar y asegurar una experiencia de usuario fluida.
 
-## 0.1.0 - 2024-06-10
+## [0.1.0 - 2024-06-12](./pricesApp%20v0.1.0)
 ### Added
 - Añadida la funcionalidad de "Añadidos recientemente" para mostrar los 10 últimos productos agregados.
 - Menú con categorías generales y subcategorías en `index.html`.
