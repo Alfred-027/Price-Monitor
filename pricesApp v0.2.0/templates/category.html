@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_name }} - Price Monitor</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluir CSS personalizado -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="/recent">Añadidos Recientemente</a>
+        <a href="#">Groups</a>
+        <a href="#">Favorites</a>
+        <a href="#">Trash</a>
+        <a href="#">Settings</a>
+        <a href="#">Log Out</a>
+        <hr>
+        <h3 class="text-center">Categorías</h3>
+        <ul class="list-unstyled">
+            {% for category in categories %}
+                <li>
+                    <a href="#" onclick="fetchSubcategories({{ category[0] }})">{{ category[1] }}</a>
+                    <ul class="list-unstyled d-none" id="subcategories-{{ category[0] }}"></ul>
+                </li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <p class="text-center">Versión: {{ version }}</p>
+    </div>
+    <div class="main-content container-fluid">
+        <h1 class="mb-4">{{ category_name }}</h1>
+        <div class="product-grid mt-4">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ product.image }}" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">${{ product.price }}</h5>
+                                <a href="{{ product.url }}" class="btn btn-primary" target="_blank">Ver Producto</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Incluir jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        async function fetchSubcategories(categoryId) {
+            const response = await fetch(`/categories/${categoryId}/subcategories`);
+            const subcategories = await response.json();
+            const subcategoryList = document.getElementById(`subcategories-${categoryId}`);
+            subcategoryList.innerHTML = '';
+
+            subcategories.forEach(subcategory => {
+                const subcategoryItem = document.createElement('li');
+                const subcategoryLink = document.createElement('a');
+                subcategoryLink.href = '#';
+                subcategoryLink.textContent = subcategory[1];
+                subcategoryLink.onclick = () => fetchProducts(subcategory[0]);
+                subcategoryItem.appendChild(subcategoryLink);
+                subcategoryList.appendChild(subcategoryItem);
+            });
+
+            subcategoryList.classList.toggle('d-none');
+        }
+
+        async function fetchProducts(categoryId) {
+            const response = await fetch(`/categories/${categoryId}/products`);
+            const products = await response.json();
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'col-md-4 mb-4';
+                productCard.innerHTML = `
+                    <div class="card">
+                        <img src="${product[2]}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">$${product[1]}</h5>
+                            <a href="${product[0]}" class="btn btn-primary" target="_blank">Ver Producto</a>
+                        </div>
+                    </div>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+    </script>
+</body>
+</html>

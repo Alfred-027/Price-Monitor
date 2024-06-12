@@ -1,0 +1,208 @@
+/* Variables de colores */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --sidebar-bg-color: #333;
+    --sidebar-link-color: #ccc;
+    --sidebar-link-hover-bg: #575757;
+    --sidebar-link-hover-color: #fff;
+    --card-bg: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --team-card-border-blue: #007bff;
+    --team-card-border-orange: #fd7e14;
+    --team-card-border-red: #dc3545;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    width: 250px; /* Ajusta el ancho si es necesario */
+    position: fixed;
+    top: 0;
+    left: -250px; /* Esto asegura que el sidebar esté oculto inicialmente */
+    height: 100%;
+    background: var(--sidebar-bg-color);
+    padding: 15px;
+    box-shadow: 2px 0 5px var(--card-shadow);
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar h2, .sidebar h3 {
+    color: #fff;
+    text-align: center;
+}
+
+.sidebar a {
+    color: var(--sidebar-link-color);
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar a:hover {
+    background: var(--sidebar-link-hover-bg);
+    color: var(--sidebar-link-hover-color);
+}
+
+.sidebar a:focus {
+    outline: 2px solid var(--primary-color);
+    background: var(--sidebar-link-hover-bg);
+    color: var(--sidebar-link-hover-color);
+}
+
+.sidebar ul {
+    padding-left: 20px;
+}
+
+.main-content {
+    margin-left: 20px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.product-details {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px var(--card-shadow);
+}
+
+.product-grid .card {
+    box-shadow: 0 0 10px var(--card-shadow);
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-grid .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--card-shadow);
+}
+
+.product-grid .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.team-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px var(--card-shadow);
+    margin-bottom: 20px;
+    border-left: 5px solid transparent;
+}
+
+.team-card.blue {
+    border-left-color: var(--team-card-border-blue);
+}
+
+.team-card.orange {
+    border-left-color: var(--team-card-border-orange);
+}
+
+.team-card.red {
+    border-left-color: var(--team-card-border-red);
+}
+
+.team-card h4 {
+    margin-top: 0;
+}
+
+.team-card .close {
+    float: right;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.team-card .close:hover {
+    color: #333;
+}
+
+/* Estilos para el contenedor del gráfico */
+#priceChart {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px var(--card-shadow);
+    margin-top: 20px;
+}
+
+/* Estilos para mensajes flash */
+.alert {
+    margin-top: 20px;
+}
+
+/* Estilos para categorías y subcategorías */
+.category-link {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.subcategory-link {
+    font-style: italic;
+    font-size: 0.9em;
+    padding-left: 20px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        left: 0;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .product-grid .card-img-top {
+        height: 150px;
+    }
+}
+
+#menu-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+}
+
+/* Estilos para Boton de Cerrar Sidebar*/
+.sidebar .btn-link {
+    padding: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.sidebar .btn-link:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+

@@ -1,0 +1,16 @@
+services:
+  price-monitor:
+    build:
+      context: /appdata/pricesApp
+      dockerfile: Dockerfile
+    container_name: price-monitor
+    volumes:
+      - /appdata/pricesApp:/app
+    ports:
+      - '5000:5000'
+    restart: unless-stopped
+    environment:
+      - EMAIL_USER=pricemonitor.alert@gmail.com
+      - EMAIL_PASS=Ag2015++
+      - TZ=America/Santiago  # Establece tu zona horaria local aquí
+    user: '1000:100'
