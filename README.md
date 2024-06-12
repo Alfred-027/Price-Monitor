@@ -4,7 +4,7 @@ Personal Mini - Proyect to track web pages prices
 # Release Notes
 
 ## [0.2.0 - 2024-06-12](./pricesApp%20v0.2.0)
-#### Added
+### Added
 - Botón de menú para desplegar y replegar la barra lateral.
 - Botón de cerrar (X) en el borde superior derecho del sidebar para volver a replegarlo.
 ### Fixed
